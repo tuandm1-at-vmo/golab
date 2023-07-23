@@ -41,6 +41,8 @@ func main() {
 		runLab022()
 	case 23:
 		runLab023()
+	case 24:
+		runLab024()
 	default:
 		println("no lab found")
 	}
@@ -177,4 +179,13 @@ func runLab023() {
 			println(result.Number)
 		}
 	}
+}
+
+func runLab024() {
+	print("which port your server will listen on? ")
+	var port int
+	fmt.Scan(&port)
+	fmt.Printf("ok, server listening on %d...\n", port)
+	println("press ^c to exit")
+	lab02.StartServer(port)
 }
