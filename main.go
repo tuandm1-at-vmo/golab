@@ -3,12 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	"tuanm.dev/golab/lab01"
+	"tuanm.dev/golab/lab02"
 )
 
 var reader = bufio.NewReader(os.Stdin)
@@ -32,6 +35,8 @@ func main() {
 		runLab012()
 	case 3:
 		runLab013()
+	case 21:
+		runLab021()
 	default:
 		println("no lab found")
 	}
@@ -82,5 +87,24 @@ func runLab013() {
 		for _, link := range links {
 			fmt.Printf("- %s\n", link)
 		}
+	}
+}
+
+func runLab021() {
+	messages := make(chan string)
+
+	go func() {
+		rand.Seed(time.Now().UnixNano())
+		duration := time.Duration(rand.Intn(5)*int(time.Second) + 1) // duration is randomly in range [1,5]
+		println("you're gonna got a quote every " + duration.String())
+		println("press ^c to exit")
+		for {
+			time.Sleep(duration)
+			messages <- lab02.GenerateRandomMessage()
+		}
+	}()
+
+	for message := range messages {
+		println(message)
 	}
 }
