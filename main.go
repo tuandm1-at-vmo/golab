@@ -37,6 +37,8 @@ func main() {
 		runLab013()
 	case 21:
 		runLab021()
+	case 22:
+		runLab022()
 	default:
 		println("no lab found")
 	}
@@ -97,14 +99,46 @@ func runLab021() {
 		rand.Seed(time.Now().UnixNano())
 		duration := time.Duration(rand.Intn(5)*int(time.Second) + 1) // duration is randomly in range [1,5]
 		println("you're gonna got a quote every " + duration.String())
-		println("press ^c to exit")
 		for {
 			time.Sleep(duration)
 			messages <- lab02.GenerateRandomMessage()
 		}
 	}()
 
+	println("press ^c to exit")
 	for message := range messages {
 		println(message)
+	}
+}
+
+func runLab022() {
+	red := make(chan bool)
+	green := make(chan bool)
+	yellow := make(chan bool)
+	current := make(chan string)
+
+	go lab02.WaitColor(lab02.Color{
+		Current: lab02.Red,
+		Ttl:     15,
+		Wait:    red,
+		Notify:  green,
+	}, current)
+	go lab02.WaitColor(lab02.Color{
+		Current: lab02.Green,
+		Ttl:     30,
+		Wait:    green,
+		Notify:  yellow,
+	}, current)
+	go lab02.WaitColor(lab02.Color{
+		Current: lab02.Yellow,
+		Ttl:     3,
+		Wait:    yellow,
+		Notify:  red,
+	}, current)
+
+	println("press ^c to exit")
+	yellow <- true
+	for color := range current {
+		println(time.Now().Format(time.Stamp) + ": " + color)
 	}
 }
