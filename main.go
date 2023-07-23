@@ -39,6 +39,8 @@ func main() {
 		runLab021()
 	case 22:
 		runLab022()
+	case 23:
+		runLab023()
 	default:
 		println("no lab found")
 	}
@@ -140,5 +142,39 @@ func runLab022() {
 	yellow <- true
 	for color := range current {
 		println(time.Now().Format(time.Stamp) + ": " + color)
+	}
+}
+
+func runLab023() {
+	ports := make(chan int, 65535)
+	results := make(chan lab02.Port)
+
+	print("give me a host: ")
+	host, _ := reader.ReadString('\n')
+	host = strings.Replace(host, "\n", "", -1)
+	println("scanning open ports for " + host + "...")
+
+	checkers := 69
+	timeout := 6
+	for i := 0; i < checkers; i++ {
+		go func() {
+			for port := range ports {
+				results <- lab02.Port{
+					Number: port,
+					Open:   lab02.CheckPort(host, port, timeout),
+				}
+			}
+		}()
+	}
+
+	for port := 1; port <= cap(ports); port++ {
+		ports <- port
+	}
+
+	println("press ^c to exit")
+	for result := range results {
+		if result.Open {
+			println(result.Number)
+		}
 	}
 }
