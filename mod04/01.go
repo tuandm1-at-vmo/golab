@@ -1,4 +1,4 @@
-package lab02
+package mod04
 
 import (
 	"bytes"

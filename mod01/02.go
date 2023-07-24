@@ -1,4 +1,4 @@
-package lab01
+package mod01
 
 import (
 	"encoding/json"

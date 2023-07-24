@@ -5,4 +5,4 @@ remove_executable() {
 }
 trap remove_executable EXIT
 
-go build . && ./golab $1
+go build . && ./golab $@
