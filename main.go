@@ -6,6 +6,7 @@ import (
 
 	"tuanm.dev/golab/mod01"
 	"tuanm.dev/golab/mod04"
+	"tuanm.dev/golab/mod05"
 )
 
 func main() {
@@ -21,6 +22,8 @@ func main() {
 		mod01.Run(lab)
 	case 4:
 		mod04.Run(lab)
+	case 5:
+		mod05.Run(lab)
 	default:
 		println("no module found")
 	}
